@@ -18,6 +18,7 @@ TEXTURE fond[SQUARE_S];
 TEXTURE road[SQUARE_S];
 TEXTURE radar_box[SQUARE_S];
 TEXTURE radar_mount[SQUARE_S];
+TEXTURE radar_b_mount[SQUARE_S];
 TEXTURE radar_cam[SQUARE_S];
 
 #define CAR_S 10
@@ -42,5 +43,17 @@ TEXTURE circle[CIRCLE_S];
 #define CANNON_T GL_POLYGON
 TEXTURE cannon[CANNON_S]; 
 
+#define BULLET_S 4
+#define BULLET_T GL_POLYGON
+TEXTURE bullet[BULLET_S]; 
+
+#define STAR_S 8
+#define STAR_T GL_POLYGON
+TEXTURE star[STAR_S];
+
+#define EXPLO_S 8
+#define EXPLO_T GL_POLYGON
+TEXTURE explo1[EXPLO_S];
+TEXTURE explo2[EXPLO_S];
 
 #endif
