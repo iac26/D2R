@@ -165,6 +165,8 @@ void calculate() {
 	}
 	global_step++;
 	difficulty = (score / 10) + 1; 
+	if (score < 0)
+		difficulty = 1;
 	glutPostRedisplay();
 	glutTimerFunc(FLEN, calculate, 0);
 }
