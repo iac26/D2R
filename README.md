@@ -2,4 +2,4 @@
 
 destructeur 2 radar is a small game written in C 
 
-its purpose: relax after you get flashed by a radar by destroying as many as you can
+its purpose: relax after you get flashed on the road by destroying as many radars as you can
