@@ -19,6 +19,8 @@ TEXTURE road[SQUARE_S];
 TEXTURE radar_box[SQUARE_S];
 TEXTURE radar_mount[SQUARE_S];
 TEXTURE radar_b_mount[SQUARE_S];
+TEXTURE low_radar_mount[SQUARE_S];
+TEXTURE low_radar_b_mount[SQUARE_S];
 TEXTURE radar_cam[SQUARE_S];
 
 #define CAR_S 10

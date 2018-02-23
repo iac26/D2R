@@ -19,7 +19,7 @@
 #define B_Y0 4.05
 #define R_X0 13.
 #define R_Y0 4.3
-#define MAX_BULLETS 5
+#define MAX_BULLETS 4
 #define MAX_RADARS 10
 #define TIME_RATE 50.
 #define R_SPEED 5.
@@ -33,7 +33,8 @@ typedef struct {
 	int intact;
 	int active;
 	int e_step;
-	int step; 
+	int step;
+	int low; 
 }RADAR;
 
 typedef struct {
@@ -56,7 +57,7 @@ void keyboard(char key);
 void reshape(int w, int h);
 void texturePrint(TEXTURE* tex, int size, int type, float x, float y, float r);
 void draw_car(float x, float y);
-void draw_radar(float x, float y, int v, int e, int ex);
+void draw_radar(float x, float y, int v, int e, int ex, int h);
 void draw_bullet(float x, float y, int v);
 void draw_text(char *string,float x,float y);
 float aim = 20;
@@ -106,12 +107,17 @@ void affichage(void) {
 	texturePrint(fond, SQUARE_S, SQUARE_T, 0, 0, 0);
 	texturePrint(road, SQUARE_S, SQUARE_T, 0, 0, 0);
 	for(int i = 0; i < MAX_RADARS; i++)
-		draw_radar(radars[i].x, radars[i].y, radars[i].visible, radars[i].intact, radars[i].e_step);
+		draw_radar(radars[i].x, radars[i].y, radars[i].visible, radars[i].intact, radars[i].e_step, radars[i].low);
 	for(int i = 0; i < MAX_BULLETS; i++)
 		draw_bullet(bullets[i].x, bullets[i].y, bullets[i].visible);
 	draw_car(0, 5);
+	
 	if(flash == 1) {
 		texturePrint(star, STAR_S, STAR_T, 0.6, 2.15, 0);
+		flash = 0;
+	}
+	if(flash == 2) {
+		texturePrint(star, STAR_S, STAR_T, 0.6, 3.15, 0);
 		flash = 0;
 	}
 	char* str[25];
@@ -199,6 +205,7 @@ void launch_radar(RADAR* r) {
 	r->active = 1;
 	r->step = 0;
 	r->e_step = 0;
+	r->low = rand() % 2; 
 }
 
 void update_radar(RADAR* r) {
@@ -223,20 +230,36 @@ void collisions(void) {
 		if((radars[i].x < 1.)&&(radars[i].intact == 1)&&(radars[i].visible == 1)&&
 			(radars[i].active == 1)) {
 			radars[i].active = 0;
-			flash = 1;
-			score -= 5; 
+			if (radars[i].low == 0){
+				flash = 1;
+			}
+			if (radars[i].low == 1){
+				flash = 2;
+			}
+			score -= 5;
 		}
 		for (int j = 0; j < MAX_BULLETS; j++){
 			if(bullets[j].y > 5) {
 				bullets[j].visible = 0;
 			}
-			if((bullets[j].x < radars[i].x+0.3)&&(bullets[j].x > radars[i].x-0.3)&&
-				(bullets[j].y < radars[i].y-1.7)&&(bullets[j].y > radars[i].y-2.3)&&
-				(bullets[j].visible == 1)&&(radars[i].intact == 1)) {
-				score += 1;
-				radars[i].intact = 0;
-				radars[i].e_step = 1;
-				bullets[j].visible = 0;
+			if((bullets[j].visible == 1)&&(radars[i].intact == 1)) {
+				if(	(bullets[j].x < radars[i].x+0.3)&&(bullets[j].x > radars[i].x-0.3)&&
+					(bullets[j].y < radars[i].y-1.7)&&(bullets[j].y > radars[i].y-2.3)&&
+					(radars[i].low == 0)) {
+					score += 1;
+					radars[i].intact = 0;
+					radars[i].e_step = 1;
+					bullets[j].visible = 0;
+				}
+				if(	(bullets[j].x < radars[i].x+0.3)&&(bullets[j].x > radars[i].x-0.3)&&
+					(bullets[j].y < radars[i].y-0.7)&&(bullets[j].y > radars[i].y-1.3)&&
+					(radars[i].low == 1)) {
+					score += 1;
+					radars[i].intact = 0;
+					radars[i].e_step = 1;
+					bullets[j].visible = 0;
+				}
+				
 			}
 		}
 		
@@ -296,24 +319,45 @@ void draw_car(float x, float y) {
 	texturePrint(lamp2, LAMP_S, LAMP_T, x, y, 0);
 }
 
-void draw_radar(float x, float y, int v, int e, int ex) {
+void draw_radar(float x, float y, int v, int e, int ex, int h) {
 	if(v) {
-		if (e) {
-			texturePrint(radar_cam, SQUARE_S, SQUARE_T, x-0.2, y-2.1, 0);
-			texturePrint(radar_cam, SQUARE_S, SQUARE_T, x-0.17, y-1.9, 0);
-			texturePrint(radar_mount, SQUARE_S, SQUARE_T, x, y, 0);
-			texturePrint(radar_box, SQUARE_S, SQUARE_T, x, y-2, 0);
-		} else {
-			texturePrint(radar_b_mount, SQUARE_S, SQUARE_T, x, y, 0);
+		if(h == 0) {
+			if (e) {
+				texturePrint(radar_cam, SQUARE_S, SQUARE_T, x-0.2, y-2.1, 0);
+				texturePrint(radar_cam, SQUARE_S, SQUARE_T, x-0.17, y-1.9, 0);
+				texturePrint(radar_mount, SQUARE_S, SQUARE_T, x, y, 0);
+				texturePrint(radar_box, SQUARE_S, SQUARE_T, x, y-2, 0);
+			} else {
+				texturePrint(radar_b_mount, SQUARE_S, SQUARE_T, x, y, 0);
+			}
+			if(ex) {
+				int r = rand()%90;
+				if(ex<=10)
+					texturePrint(explo1, EXPLO_S, EXPLO_T, x, y-2, r);
+					texturePrint(explo1, EXPLO_S, EXPLO_T, x, y-2, r+45);
+				if(ex>=10)
+					texturePrint(explo2, EXPLO_S, EXPLO_T, x, y-2, r);
+					texturePrint(explo2, EXPLO_S, EXPLO_T, x, y-2, r+45);
+			}
 		}
-		if(ex) {
-			int r = rand()%90;
-			if(ex<=10)
-				texturePrint(explo1, EXPLO_S, EXPLO_T, x, y-2, r);
-				texturePrint(explo1, EXPLO_S, EXPLO_T, x, y-2, r+45);
-			if(ex>=10)
-				texturePrint(explo2, EXPLO_S, EXPLO_T, x, y-2, r);
-				texturePrint(explo2, EXPLO_S, EXPLO_T, x, y-2, r+45);
+		if(h == 1) {
+			if (e) {
+				texturePrint(radar_cam, SQUARE_S, SQUARE_T, x-0.2, y-1.1, 0);
+				texturePrint(radar_cam, SQUARE_S, SQUARE_T, x-0.17, y-0.9, 0);
+				texturePrint(low_radar_mount, SQUARE_S, SQUARE_T, x, y, 0);
+				texturePrint(radar_box, SQUARE_S, SQUARE_T, x, y-1, 0);
+			} else {
+				texturePrint(low_radar_b_mount, SQUARE_S, SQUARE_T, x, y, 0);
+			}
+			if(ex) {
+				int r = rand()%90;
+				if(ex<=10)
+					texturePrint(explo1, EXPLO_S, EXPLO_T, x, y-1, r);
+					texturePrint(explo1, EXPLO_S, EXPLO_T, x, y-1, r+45);
+				if(ex>=10)
+					texturePrint(explo2, EXPLO_S, EXPLO_T, x, y-1, r);
+					texturePrint(explo2, EXPLO_S, EXPLO_T, x, y-1, r+45);
+			}
 		}
 	}
 }
