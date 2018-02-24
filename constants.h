@@ -25,5 +25,7 @@
 #define TIME_RATE 40.
 #define R_SPEED 5.
 #define MAX_DIFF 8
+#define MENU_LOW 0
+#define MENU_HIGH 2
 
 #endif

@@ -4,7 +4,7 @@
 # Date: 24.02.2018
 # Filename: Makefile
 
-CFLAGS=-Wall
+CFLAGS=-Wall -w
 
 LIBS=-framework GLUT -framework OpenGL -framework Cocoa
 

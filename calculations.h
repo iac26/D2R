@@ -42,6 +42,12 @@ BULLET bullets[];
 RADAR radars[]; 
 int rad;
 int ap;
+int power;
+int freeze;
+int menu;
+int game_over;
+int menu_select;
+int menu_trigger;
 
 void calculate(void);
 void collisions(void);
@@ -50,5 +56,6 @@ void fire_bullet(BULLET* b);
 void update_radar(RADAR* r);
 void launch_radar(RADAR* r);
 void autopilot(void);
+void reset(void);
 
 #endif

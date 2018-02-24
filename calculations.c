@@ -25,68 +25,93 @@ BULLET bullets[MAX_BULLETS];
 RADAR radars[MAX_RADARS]; 
 int rad = 0;
 int ap = 0;
+int power = 0; 
+int freeze = 0;
+int menu = 0;
+int game_over = 0;
+int menu_select = 0;
+int menu_trigger = 0;
 
 void calculate() {
-	int i;
-	tire_angle += TIRE_SPEED;
-	if (tire_angle > 360.)
-		tire_angle = 0.;
-	if (aiming_up) {
-		if (aim < 65){
-			aim+=AIM_SPEED;
+	if(!freeze) {
+		tire_angle += TIRE_SPEED;
+		if (tire_angle > 360.)
+			tire_angle = 0.;
+		if (aiming_up) {
+			if (aim < 65){
+				aim+=AIM_SPEED;
+			}
+		}
+		if (aiming_down) {
+			if (aim > 5) {
+				aim-=AIM_SPEED;
+			}
+		}
+		if (fire == 1) { //fire a new bullet
+			for (int i = 0; i < MAX_BULLETS; i++) {
+				if (bullets[i].visible == 0){
+					fire_bullet(&bullets[i]);
+					break; 
+				} 
+			}
+			fire = 0; 
+		}
+		
+		if((global_step - last_sent) == next_send) { 
+			last_sent = global_step;
+			next_send = (rand()% 50 + 50)/difficulty;
+			if (rad == 0) {
+				rad = 1; 
+			}
+		}
+		if (rad == 1){ // launch radar
+			for (int i = 0; i < MAX_RADARS; i++) {
+				if (radars[i].visible == 0){
+					launch_radar(&radars[i]);
+					break;
+				} 
+			}
+			rad = 0; 
+		}
+		if (ap) {
+			autopilot();
+		}
+		collisions();
+		for (int i = 0; i < MAX_RADARS; i++) {
+			update_radar(&radars[i]);
+		}
+		for (int i = 0; i < MAX_BULLETS; i++) {
+			update_bullet(&bullets[i]);
+		}
+		if (global_step > 1000000) {
+			last_sent = 0;
+			global_step = 0;
+		}
+		global_step++;
+		difficulty = (score / 20) + 1; 
+		if (difficulty > MAX_DIFF)
+			difficulty = MAX_DIFF; 
+		if (score < 0)
+			difficulty = 1;
+	}
+	if(menu) {
+		if(menu_trigger) {
+			menu_trigger = 0;
+			if(menu_select == 0) {
+				freeze = 0;
+				menu = 0;
+			}
+			if(menu_select == 1) {
+				freeze = 0;
+				menu = 0;
+				reset();
+			}
+			if(menu_select == 2) {
+				glutDestroyWindow(1);
+				exit(0);
+			}
 		}
 	}
-	if (aiming_down) {
-		if (aim > 5) {
-			aim-=AIM_SPEED;
-		}
-	}
-	if (fire == 1) { //fire a new bullet
-		for (i = 0; i < MAX_BULLETS; i++) {
-			if (bullets[i].visible == 0){
-				fire_bullet(&bullets[i]);
-				break; 
-			} 
-		}
-		fire = 0; 
-	}
-	
-	if((global_step - last_sent) == next_send) { 
-		last_sent = global_step;
-		next_send = (rand()% 50 + 50)/difficulty;
-		if (rad == 0) {
-			rad = 1; 
-		}
-	}
-	if (rad == 1){ // launch radar
-		for (i = 0; i < MAX_RADARS; i++) {
-			if (radars[i].visible == 0){
-				launch_radar(&radars[i]);
-				break;
-			} 
-		}
-		rad = 0; 
-	}
-	if (ap) {
-		autopilot();
-	}
-	collisions();
-	for (i = 0; i < MAX_RADARS; i++) {
-		update_radar(&radars[i]);
-	}
-	for (i = 0; i < MAX_BULLETS; i++) {
-		update_bullet(&bullets[i]);
-	}
-	if (global_step > 1000000) {
-		last_sent = 0;
-		global_step = 0;
-	}
-	global_step++;
-	difficulty = (score / 20) + 1; 
-	if (difficulty > MAX_DIFF)
-		difficulty = MAX_DIFF; 
-	if (score < 0)
-		difficulty = 1;
 	glutPostRedisplay();
 	glutTimerFunc(FLEN, calculate, 0);
 }
@@ -120,6 +145,16 @@ void launch_radar(RADAR* r) {
 	r->step = 0;
 	r->e_step = 0;
 	r->low = rand() % 2; 
+}
+
+void reset() {
+	score = 0;
+	for(int i = 0; i < MAX_RADARS; i++) {
+		radars[i].visible = 0;
+	}
+	for(int i = 0; i < MAX_BULLETS; i++) {
+		bullets[i].visible = 0;
+	}
 }
 
 void update_radar(RADAR* r) {
@@ -183,6 +218,7 @@ float t_aim = 20;
 int rs;
 int cd[MAX_RADARS] = {0};
 int rp = 0;
+int counter = 0;
 void autopilot(void) {
 	if (rp == 0) {
 		for (int i = 0; i < MAX_RADARS; i++) {
@@ -206,9 +242,18 @@ void autopilot(void) {
 			aim -= AIM_SPEED;
 		}
 		if ((aim > t_aim-2)&&(aim < t_aim+2)) {
-			fire = 1;
 			cd[rs] = 20;
 			rp = 0;
+			if (power) {
+				fire = 1;
+			}else{
+				if (counter != 5){
+					fire = 1;
+					counter++;
+				}else {
+					counter = 0;
+				}
+			}
 		}
 	}
 }

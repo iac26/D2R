@@ -63,17 +63,31 @@ void affichage(void) {
 		flash = 0;
 	}
 	char* str[25];
-	sprintf(str, "Score: %d", score);
-	draw_text(str, -2.5, -2.);
-	
+	sprintf(str, "Money: %d $", score);
+	draw_text(str, -2.5, -2.0, 1.0, 1.0, 1.0);
+	if(menu) {
+		if(menu_select == 0) {
+			draw_text("RESUME", 3.0, 0.0, 0.0, 0.0, 0.0);
+		}else{
+			draw_text("RESUME", 3.0, 0.0, 1.0, 1.0, 1.0);
+		}
+		if(menu_select == 1) {
+			draw_text("RESTART", 3.0, 0.5, 0.0, 0.0, 0.0);
+		}else{
+			draw_text("RESTART", 3.0, 0.5, 1.0, 1.0, 1.0);
+		}
+		if(menu_select == 2) {
+			draw_text("QUIT", 3.0, 1.0, 0.0, 0.0, 0.0);
+		}else{
+			draw_text("QUIT", 3.0, 1.0, 1.0, 1.0, 1.0);
+		}
+	}
 	glutSwapBuffers();
 }
 
 
 
 void reshape(int w, int h) {
-	//glViewport(0, 0, w, h);
-	//ratio = (float) w / (float) h;
 	glutReshapeWindow(900, 500);
 }
 
@@ -81,19 +95,44 @@ void keyboard(char key) {
 	switch(key) {
 		case 'w':
 			aiming_up = 1;
+			if (menu_select > MENU_LOW)
+				menu_select -= 1;
 			break;
 		case 's':
 			aiming_down = 1;
+			if (menu_select < MENU_HIGH)
+				menu_select += 1;
 			break;
 		case ' ':
-			if (fire == 0)
-				fire = 1; 
+			if (!freeze) {
+				if (fire == 0)
+					fire = 1; 
+			} else {
+				menu_trigger = 1;
+			}
 			break;
-		case 'p':
+		case 'c':
 			if (ap == 0) {
 				ap = 1; 
 			}else {
 				ap = 0;
+			}
+			break;
+		case 'v':
+			if (power == 0) {
+				power = 1; 
+			}else {
+				power = 0;
+			}
+			break;
+		case 'm':
+			if (freeze == 0) {
+				freeze = 1;
+				menu = 1;
+				menu_select = 0;
+			}else {
+				freeze = 0;
+				menu = 0;
 			}
 			break;
 		case 'q':
@@ -186,9 +225,9 @@ void draw_bullet(float x, float y, int v) {
 	}
 }
 
-void draw_text(char *string,float x,float y) {  
+void draw_text(char *string, float x, float y, float r, float g, float b) {  
 	char *c;
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3f(r, g, b);
 	glRasterPos2f(x, y);
 	for (c=string; *c != '\0'; c++) {
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
