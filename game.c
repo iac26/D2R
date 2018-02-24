@@ -63,25 +63,40 @@ void affichage(void) {
 		flash = 0;
 	}
 	char* str[25];
-	sprintf(str, "Money: %d $", score);
-	draw_text(str, -2.5, -2.0, 1.0, 1.0, 1.0);
+	sprintf(str, "CASH: %d $", score);
+	float shift;
+	if ((score > 9)||(score < 0))
+		shift = 0.2;
+	if ((score > 99)||(score < -9))
+		shift = 0.4;
+	if ((score > 999)||(score < -99))
+		shift = 0.6;
+	draw_text(str, 10-shift, -2.3, 1.0, 1.0, 1.0);
 	if(menu) {
 		if(menu_select == 0) {
-			draw_text("RESUME", 3.0, 0.0, 0.0, 0.0, 0.0);
+			draw_text("RESUME", 3.5, 0.0, 0.0, 0.0, 0.0);
 		}else{
-			draw_text("RESUME", 3.0, 0.0, 1.0, 1.0, 1.0);
+			draw_text("RESUME", 3.5, 0.0, 1.0, 1.0, 1.0);
 		}
 		if(menu_select == 1) {
-			draw_text("RESTART", 3.0, 0.5, 0.0, 0.0, 0.0);
+			draw_text("RESTART", 3.5, 0.5, 0.0, 0.0, 0.0);
 		}else{
-			draw_text("RESTART", 3.0, 0.5, 1.0, 1.0, 1.0);
+			draw_text("RESTART", 3.5, 0.5, 1.0, 1.0, 1.0);
 		}
 		if(menu_select == 2) {
-			draw_text("QUIT", 3.0, 1.0, 0.0, 0.0, 0.0);
+			draw_text("QUIT", 3.5, 1.0, 0.0, 0.0, 0.0);
 		}else{
-			draw_text("QUIT", 3.0, 1.0, 1.0, 1.0, 1.0);
+			draw_text("QUIT", 3.5, 1.0, 1.0, 1.0, 1.0);
 		}
 	}
+	if(ap) {
+		if(power) {
+			draw_text("P", 11.7, 5.5, 0.5, 1.0, 0.5);
+		}else{
+			draw_text("P", 11.7, 5.5, 1.0, 0.5, 0.5);
+		}
+	}
+	
 	glutSwapBuffers();
 }
 
@@ -111,14 +126,14 @@ void keyboard(char key) {
 				menu_trigger = 1;
 			}
 			break;
-		case 'c':
+		case 'p':
 			if (ap == 0) {
 				ap = 1; 
 			}else {
 				ap = 0;
 			}
 			break;
-		case 'v':
+		case 'o':
 			if (power == 0) {
 				power = 1; 
 			}else {
