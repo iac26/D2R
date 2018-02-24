@@ -29,8 +29,10 @@ int main(int argc, char **argv) {
 	glutCreateWindow("Destructeur 2 Radar"); 
 	glutDisplayFunc(affichage);
 	glutKeyboardFunc(keyboard);
+	glutKeyboardUpFunc(keyboard_2);
 	glutReshapeFunc(reshape);
 	glutTimerFunc(FLEN, calculate, 0);
+	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 	glutMainLoop();
 }
 
@@ -78,12 +80,10 @@ void reshape(int w, int h) {
 void keyboard(char key) {
 	switch(key) {
 		case 'w':
-			if (aim < 65)
-				aim +=AIM_SPEED;
+			aiming_up = 1;
 			break;
 		case 's':
-			if (aim > 5)
-				aim -= AIM_SPEED;
+			aiming_down = 1;
 			break;
 		case ' ':
 			if (fire == 0)
@@ -101,6 +101,16 @@ void keyboard(char key) {
 			exit(0);
 			break;
 	}
+}
+void keyboard_2(char key) {
+	switch(key) {
+		case 'w':
+			aiming_up = 0;
+			break;
+		case 's':
+			aiming_down = 0;
+			break;
+		}
 }
 
 void texturePrint(TEXTURE* tex, int size, int type, float x, float y, float r) {

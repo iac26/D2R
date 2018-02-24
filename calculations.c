@@ -11,6 +11,8 @@
 #include "constants.h"
 
 float aim = 20;
+int aiming_up = 0;
+int aiming_down = 0;
 float tire_angle = 0;
 int fire = 0; 
 int flash = 0;
@@ -29,6 +31,16 @@ void calculate() {
 	tire_angle += TIRE_SPEED;
 	if (tire_angle > 360.)
 		tire_angle = 0.;
+	if (aiming_up) {
+		if (aim < 65){
+			aim+=AIM_SPEED;
+		}
+	}
+	if (aiming_down) {
+		if (aim > 5) {
+			aim-=AIM_SPEED;
+		}
+	}
 	if (fire == 1) { //fire a new bullet
 		for (i = 0; i < MAX_BULLETS; i++) {
 			if (bullets[i].visible == 0){
@@ -70,7 +82,7 @@ void calculate() {
 		global_step = 0;
 	}
 	global_step++;
-	difficulty = (score / 10) + 1; 
+	difficulty = (score / 20) + 1; 
 	if (difficulty > MAX_DIFF)
 		difficulty = MAX_DIFF; 
 	if (score < 0)
@@ -183,7 +195,7 @@ void autopilot(void) {
 		}
 	}else {
 		if (radars[rs].low == 1) {
-			t_aim = 20; 
+			t_aim = 17; 
 		} else {
 			t_aim = 30; 
 		}
@@ -193,7 +205,7 @@ void autopilot(void) {
 		if (aim > t_aim) {
 			aim -= AIM_SPEED;
 		}
-		if (aim == t_aim) {
+		if ((aim > t_aim-2)&&(aim < t_aim+2)) {
 			fire = 1;
 			cd[rs] = 20;
 			rp = 0;

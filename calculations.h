@@ -28,6 +28,8 @@ typedef struct {
 }BULLET;
 
 float aim;
+int aiming_up;
+int aiming_down;
 float tire_angle;
 int fire; 
 int flash;

@@ -11,6 +11,7 @@
 
 void affichage(void);
 void keyboard(char key);
+void keyboard_2(char key);
 void reshape(int w, int h);
 void texturePrint(TEXTURE* tex, int size, int type, float x, float y, float r);
 void draw_car(float x, float y);
