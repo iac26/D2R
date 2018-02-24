@@ -1,4 +1,5 @@
 //graphics.c
+//NOT USED ANYMORE
 
 #include <stdlib.h>
 #include <GLUT/glut.h>
