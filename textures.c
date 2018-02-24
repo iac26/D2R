@@ -1,7 +1,7 @@
 /* DESTRUCTEUR 2 RADAR
  * Author: Iacopo Sprenger
- * Version: 1.0
- * Date: 24.02.2018
+ * Version: 1.1
+ * Date: 25.02.2018
  * Filename: texture.c
  * */
 

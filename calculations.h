@@ -1,7 +1,7 @@
 /* DESTRUCTEUR 2 RADAR
  * Author: Iacopo Sprenger
- * Version: 1.0
- * Date: 24.02.2018
+ * Version: 1.1
+ * Date: 25.02.2018
  * Filename: calculations.h
  * */
 #ifndef CALCULATIONS_H
@@ -31,6 +31,8 @@ float aim;
 int aiming_up;
 int aiming_down;
 float tire_angle;
+float cur_x;
+float cur_y;
 int fire; 
 int flash;
 int score; 
@@ -48,6 +50,7 @@ int menu;
 int game_over;
 int menu_select;
 int menu_trigger;
+int active_mouse;
 
 void calculate(void);
 void collisions(void);
@@ -57,5 +60,8 @@ void update_radar(RADAR* r);
 void launch_radar(RADAR* r);
 void autopilot(void);
 void reset(void);
+
+float convert_x(int x);
+float convert_y(int y);
 
 #endif

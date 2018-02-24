@@ -1,7 +1,7 @@
 # DESTRUCTEUR 2 RADAR
 # Author: Iacopo Sprenger
-# Version: 1.0
-# Date: 24.02.2018
+# Version: 1.1
+# Date: 25.02.2018
 # Filename: Makefile
 
 CFLAGS=-Wall -w
@@ -18,7 +18,7 @@ D2R : $(OFILES)
 game.o : game.c game.h calculations.h textures.h constants.h
 	gcc $(CFLAGS) -c $< -o $@
 	
-calculations.o : calculations.c calculations.h constants.h
+calculations.o : calculations.c calculations.h constants.h game.h
 	gcc $(CFLAGS) -c $< -o $@
 	
 textures.o : textures.c textures.h

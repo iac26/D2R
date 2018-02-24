@@ -1,7 +1,7 @@
 /* DESTRUCTEUR 2 RADAR
  * Author: Iacopo Sprenger
- * Version: 1.0
- * Date: 24.02.2018
+ * Version: 1.1
+ * Date: 25.02.2018
  * Filename: calculations.c
  * */
  
@@ -9,8 +9,11 @@
 #include <stdio.h>
 #include "calculations.h"
 #include "constants.h"
+#include "game.h"
 
 float aim = 20;
+float cur_x = 0;
+float cur_y = 0;
 int aiming_up = 0;
 int aiming_down = 0;
 float tire_angle = 0;
@@ -31,6 +34,7 @@ int menu = 0;
 int game_over = 0;
 int menu_select = 0;
 int menu_trigger = 0;
+int active_mouse = 0;
 
 void calculate() {
 	if(!freeze) {
@@ -47,6 +51,17 @@ void calculate() {
 				aim-=AIM_SPEED;
 			}
 		}
+		if (active_mouse) {
+			float aim_x = -B_X0 + cur_x;
+			float aim_y = B_Y0 - cur_y;
+			aim = atanf(aim_y/aim_x)/0.0174;
+			if (aim > 65){
+				aim = 65;
+			}
+			if (aim < 5){
+				aim = 5;
+			}
+		}
 		if (fire == 1) { //fire a new bullet
 			for (int i = 0; i < MAX_BULLETS; i++) {
 				if (bullets[i].visible == 0){
@@ -56,7 +71,6 @@ void calculate() {
 			}
 			fire = 0; 
 		}
-		
 		if((global_step - last_sent) == next_send) { 
 			last_sent = global_step;
 			next_send = (rand()% 50 + 50)/difficulty;
@@ -88,11 +102,13 @@ void calculate() {
 			global_step = 0;
 		}
 		global_step++;
-		difficulty = (score / 20) + 1; 
+		difficulty = (score / 30) + 1; 
 		if (difficulty > MAX_DIFF)
 			difficulty = MAX_DIFF; 
 		if (score < 0)
 			difficulty = 1;
+		if (score > 500)
+			difficulty = 10;
 	}
 	if(menu) {
 		if(menu_trigger) {
@@ -107,8 +123,7 @@ void calculate() {
 				reset();
 			}
 			if(menu_select == 2) {
-				glutDestroyWindow(1);
-				exit(0);
+				quit();
 			}
 		}
 	}
@@ -214,6 +229,15 @@ void collisions(void) {
 		
 	}
 }
+
+float convert_x(int x) {
+	return (((float) x / 900)*15) - 3; 
+}
+
+float convert_y(int y) {
+	return (((float) y / 500)*8.34) - 2.78; 
+}
+
 float t_aim = 20;
 int rs;
 int cd[MAX_RADARS] = {0};
