@@ -1,7 +1,13 @@
-//graphics.c
+/* DESTRUCTEUR 2 RADAR
+ * Author: Iacopo Sprenger
+ * Version: 1.0
+ * Date: 24.02.2018
+ * Filename: game.c
+ * */
 
 #include <stdlib.h>
 #include <GLUT/glut.h>
+// use #include <GL/glut.h> for linux
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
@@ -14,11 +20,13 @@ float ratio;
 
 int main(int argc, char **argv) {
 	srand(time(NULL));
+	
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(200,200);
 	glutInitWindowSize(900,500);
 	ratio = (float) 900 / (float) 500 ;
+	
 	glutCreateWindow("Destructeur 2 Radar"); 
 	glutDisplayFunc(affichage);
 	glutKeyboardFunc(keyboard);
@@ -28,16 +36,15 @@ int main(int argc, char **argv) {
 }
 
 void affichage(void) {
-	
 	glClearColor(1.0, 1.0, 1.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glLoadIdentity();
+	
 	if (ratio >= 1.){
 		glOrtho(GAUCHE, DROITE, BAS/ratio, HAUT/ratio,-1,1); 
 	}else{
 		glOrtho(GAUCHE*ratio, DROITE*ratio, BAS, HAUT,-1,1);
 	}
-	
 	texturePrint(fond, SQUARE_S, SQUARE_T, 0, 0, 0);
 	texturePrint(road, SQUARE_S, SQUARE_T, 0, 0, 0);
 	for(int i = 0; i < MAX_RADARS; i++)
@@ -45,7 +52,6 @@ void affichage(void) {
 	for(int i = 0; i < MAX_BULLETS; i++)
 		draw_bullet(bullets[i].x, bullets[i].y, bullets[i].visible);
 	draw_car(0, 5);
-	
 	if(flash == 1) {
 		texturePrint(star, STAR_S, STAR_T, 0.6, 2.15, 0);
 		flash = 0;
@@ -79,7 +85,6 @@ void keyboard(char key) {
 			if (aim > 2)
 				aim -= AIM_SPEED;
 			break;
-		
 		case ' ':
 			if (fire == 0)
 				fire = 1; 
@@ -89,7 +94,6 @@ void keyboard(char key) {
 			exit(0);
 			break;
 	}
-	
 }
 
 void texturePrint(TEXTURE* tex, int size, int type, float x, float y, float r) {

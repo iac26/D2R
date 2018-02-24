@@ -1,4 +1,10 @@
-//game.c
+/* DESTRUCTEUR 2 RADAR
+ * Author: Iacopo Sprenger
+ * Version: 1.0
+ * Date: 24.02.2018
+ * Filename: calculations.c
+ * */
+ 
 #include <stdlib.h>
 #include <stdio.h>
 #include "calculations.h"
@@ -31,7 +37,6 @@ void calculate() {
 		}
 		fire = 0; 
 	}
-	
 	if((global_step - last_sent) == next_send) { 
 		last_sent = global_step;
 		next_send = (rand()% 100 + 50)/difficulty;

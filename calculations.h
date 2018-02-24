@@ -1,5 +1,9 @@
-//calculations.h
-
+/* DESTRUCTEUR 2 RADAR
+ * Author: Iacopo Sprenger
+ * Version: 1.0
+ * Date: 24.02.2018
+ * Filename: calculations.h
+ * */
 #ifndef CALCULATIONS_H
 #define CALCULATIONS_H
 
@@ -42,9 +46,5 @@ void update_bullet(BULLET* b);
 void fire_bullet(BULLET* b); 
 void update_radar(RADAR* r);
 void launch_radar(RADAR* r);
-
-
-
-
 
 #endif

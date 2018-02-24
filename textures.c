@@ -1,4 +1,9 @@
-//textures.c
+/* DESTRUCTEUR 2 RADAR
+ * Author: Iacopo Sprenger
+ * Version: 1.0
+ * Date: 24.02.2018
+ * Filename: texture.c
+ * */
 
 #include "textures.h"
 

@@ -1,4 +1,9 @@
-//constants.h
+/* DESTRUCTEUR 2 RADAR
+ * Author: Iacopo Sprenger
+ * Version: 1.0
+ * Date: 24.02.2018
+ * Filename: constants.h
+ * */
 
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
@@ -19,9 +24,5 @@
 #define MAX_RADARS 10
 #define TIME_RATE 50.
 #define R_SPEED 5.
-
-
-
-
 
 #endif
