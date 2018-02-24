@@ -13,7 +13,7 @@
 #define DROITE 12
 #define GAUCHE -3
 #define FLEN 20
-#define TIRE_SPEED 10.
+#define TIRE_SPEED 15.
 #define AIM_SPEED 5.
 #define BULLET_SPEED 8.
 #define B_X0 -0.3
@@ -21,8 +21,9 @@
 #define R_X0 13.
 #define R_Y0 4.3
 #define MAX_BULLETS 4
-#define MAX_RADARS 10
-#define TIME_RATE 50.
+#define MAX_RADARS 20
+#define TIME_RATE 40.
 #define R_SPEED 5.
+#define MAX_DIFF 8
 
 #endif

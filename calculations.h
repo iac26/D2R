@@ -39,6 +39,7 @@ int difficulty;
 BULLET bullets[];
 RADAR radars[]; 
 int rad;
+int ap;
 
 void calculate(void);
 void collisions(void);
@@ -46,5 +47,6 @@ void update_bullet(BULLET* b);
 void fire_bullet(BULLET* b); 
 void update_radar(RADAR* r);
 void launch_radar(RADAR* r);
+void autopilot(void);
 
 #endif

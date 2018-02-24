@@ -26,7 +26,6 @@ int main(int argc, char **argv) {
 	glutInitWindowPosition(200,200);
 	glutInitWindowSize(900,500);
 	ratio = (float) 900 / (float) 500 ;
-	
 	glutCreateWindow("Destructeur 2 Radar"); 
 	glutDisplayFunc(affichage);
 	glutKeyboardFunc(keyboard);
@@ -39,6 +38,7 @@ void affichage(void) {
 	glClearColor(1.0, 1.0, 1.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glLoadIdentity();
+	glEnable(GL_POLYGON_SMOOTH);
 	
 	if (ratio >= 1.){
 		glOrtho(GAUCHE, DROITE, BAS/ratio, HAUT/ratio,-1,1); 
@@ -82,12 +82,19 @@ void keyboard(char key) {
 				aim +=AIM_SPEED;
 			break;
 		case 's':
-			if (aim > 2)
+			if (aim > 5)
 				aim -= AIM_SPEED;
 			break;
 		case ' ':
 			if (fire == 0)
 				fire = 1; 
+			break;
+		case 'p':
+			if (ap == 0) {
+				ap = 1; 
+			}else {
+				ap = 0;
+			}
 			break;
 		case 'q':
 			glutDestroyWindow(1);
