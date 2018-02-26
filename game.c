@@ -6,8 +6,11 @@
  * */
 
 #include <stdlib.h>
+#ifdef __APPLE__
 #include <GLUT/glut.h>
-// use #include <GL/glut.h> for linux
+#else
+#include <GL/glut.h>
+#endif
 #include <stdio.h>
 #include <math.h>
 #include <time.h>

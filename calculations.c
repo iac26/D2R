@@ -54,7 +54,8 @@ void calculate() {
 		if (active_mouse) {
 			float aim_x = -B_X0 + cur_x;
 			float aim_y = B_Y0 - cur_y;
-			aim = atanf(aim_y/aim_x)/0.0174;
+			if ((cur_x > B_X0)&&(cur_y < B_Y0))
+				aim = atanf(aim_y/aim_x)/0.0174;
 			if (aim > 65){
 				aim = 65;
 			}
@@ -257,7 +258,7 @@ void autopilot(void) {
 		if (radars[rs].low == 1) {
 			t_aim = 17; 
 		} else {
-			t_aim = 30; 
+			t_aim = 32; 
 		}
 		if (aim < t_aim) {
 			aim += AIM_SPEED;
